@@ -1,0 +1,295 @@
+2.) Write a python script which is running in infinite loop and inserting 4-5 dummy/dynamically prepared records
+    in MySQL Table
+
+Certainly! Below is a Python script that runs in an infinite loop and inserts 4-5 dummy or dynamically
+prepared records into a MySQL table. You will need to install the mysql-connector-python package to establish a connection with the MySQL database.
+
+python
+Copy code
+import random
+import string
+import mysql.connector
+from mysql.connector import errorcode
+
+# MySQL connection configuration
+config = {
+    'user': 'your_username',
+    'password': 'your_password',
+    'host': 'localhost',
+    'database': 'your_database',
+    'raise_on_warnings': True
+}
+
+# Generate a random string of given length
+def generate_random_string(length):
+    letters = string.ascii_letters
+    return ''.join(random.choice(letters) for _ in range(length))
+
+# Insert dummy records into the MySQL table
+def insert_dummy_records():
+    try:
+        # Connect to the MySQL server
+        conn = mysql.connector.connect(**config)
+        cursor = conn.cursor()
+
+        # Generate dummy records
+        for _ in range(4, 6):
+            name = generate_random_string(10)
+            age = random.randint(18, 60)
+            email = f'{name.lower()}@example.com'
+
+            # Prepare the SQL query
+            query = "INSERT INTO your_table (name, age, email) VALUES (%s, %s, %s)"
+            values = (name, age, email)
+
+            # Execute the query
+            cursor.execute(query, values)
+
+        # Commit the changes and close the connection
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        print("Records inserted successfully.")
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Access denied. Please check your MySQL credentials.")
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            print("Database does not exist.")
+        else:
+            print("Error:", err)
+
+# Main loop
+while True:
+    insert_dummy_records()
+Make sure to replace 'your_username', 'your_password', 'localhost', 'your_database', and 'your_table' with your actual 
+MySQL database credentials and table information. The generate_random_string function is used to generate a random string 
+of a specified length for the name field. Feel free to modify the code according to your requirements.
+
+
+5.) Create json schema on schema registry (depends on what kind of data you are publishing in mysql table)
+
+To create a JSON schema on a schema registry, you'll need to define the structure of the JSON data you plan to publish in the MySQL table.
+Here's an example of a JSON schema you can use as a starting point:
+
+json
+Copy code
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MySQLTableData",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "integer"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "zip": {
+          "type": "string"
+        }
+      },
+      "required": ["street", "city", "state", "zip"]
+    },
+    "phoneNumbers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": ["id", "name", "age", "email"]
+}
+This example schema defines a JSON object representing data for a MySQL table.
+
+
+
+6.) Write a producer code which will read the data from MySQL table incrementally (hint : use and maintain create_at column)
+
+
+import mysql.connector
+from mysql.connector import Error
+from kafka import KafkaProducer
+
+# Connect to MySQL
+try:
+    connection = mysql.connector.connect(
+        host='your_host',
+        database='your_database',
+        user='your_username',
+        password='your_password'
+    )
+
+    if connection.is_connected():
+        print('Connected to MySQL database')
+
+        # Create Kafka producer
+        producer = KafkaProducer(bootstrap_servers='your_kafka_servers')
+
+        # Initialize the last processed timestamp
+        last_timestamp = None
+
+        while True:
+            # Fetch new records from MySQL based on last timestamp
+            if last_timestamp is None:
+                query = "SELECT * FROM your_table ORDER BY created_at ASC LIMIT 100"
+            else:
+                query = "SELECT * FROM your_table WHERE created_at > %s ORDER BY created_at ASC LIMIT 100"
+
+            with connection.cursor() as cursor:
+                if last_timestamp is None:
+                    cursor.execute(query)
+                else:
+                    cursor.execute(query, (last_timestamp,))
+
+                records = cursor.fetchall()
+
+                if not records:
+                    # No new records, wait for some time before checking again
+                    time.sleep(5)
+                    continue
+
+                # Process records and send them to Kafka
+                for record in records:
+                    # Assuming the table has columns: id, created_at, and other_data
+                    # Modify the code below to suit your table structure
+                    message = {
+                        'id': record[0],
+                        'created_at': record[1].strftime("%Y-%m-%d %H:%M:%S"),
+                        'other_data': record[2]
+                    }
+
+                    # Send the message to Kafka
+                    producer.send('your_topic', value=message)
+
+                    # Update the last processed timestamp
+                    last_timestamp = record[1].strftime("%Y-%m-%d %H:%M:%S")
+
+            connection.commit()
+
+except Error as e:
+    print('Error connecting to MySQL:', e)
+
+finally:
+    if connection.is_connected():
+        connection.close()
+        print('Disconnected from MySQL database')
+
+
+8.) Write consumer group to consume data from Kafka topic
+
+from kafka import KafkaConsumer
+from kafka.errors import KafkaError
+
+# Set up Kafka consumer configuration
+bootstrap_servers = 'localhost:9092'
+topic_name = 'your_topic'
+group_id = 'your_consumer_group'
+
+# Create Kafka consumer instance
+consumer = KafkaConsumer(topic_name,
+                         bootstrap_servers=bootstrap_servers,
+                         group_id=group_id)
+
+# Start consuming messages
+try:
+    for message in consumer:
+        # Process the received message
+        print("Received message: {}".format(message.value.decode('utf-8')))
+
+except KafkaError as e:
+    print("Error while consuming messages: {}".format(e))
+
+finally:
+    # Close the Kafka consumer connection
+    consumer.close()
+
+9.) In Kafka consumer code do some changes or transformation for each record and write it in Cassandra table
+
+To perform changes or transformations on each record consumed from Kafka and write it to a Cassandra table, you 
+can follow these steps:
+
+Set up Kafka Consumer: Start by setting up a Kafka consumer in your preferred programming language (e.g., Java, Python) 
+using the appropriate Kafka client library. Configure the consumer to subscribe to the desired Kafka topic.
+
+Initialize Cassandra Connection: Establish a connection to your Cassandra database from your code. Use a Cassandra driver
+ suitable for your programming language (e.g., DataStax Java Driver for Java).
+
+Consume Kafka Records: Continuously consume records from the Kafka topic using the Kafka consumer you created. 
+The records may be in a serialized format (e.g., JSON, Avro), so deserialize them according to the message format used in your Kafka topic.
+
+Apply Transformations: Apply the necessary changes or transformations to each record as per your requirements. 
+Modify the record's fields or structure according to your needs.
+
+Write to Cassandra: Once you have transformed the record, you can write it to a Cassandra table. Use the Cassandra 
+driver's API to execute the necessary insert or update statements to persist the transformed data.
+
+Here's an example in Java using the Kafka Consumer API from the Apache Kafka project and the DataStax Java Driver
+ for Cassandra:
+
+import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.StringDeserializer;
+
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.CqlSession;
+
+import java.util.Collections;
+import java.util.Properties;
+
+public class KafkaConsumerToCassandra {
+    private static final String KAFKA_BROKERS = "localhost:9092";
+    private static final String TOPIC_NAME = "your-topic";
+    private static final String CASSANDRA_HOST = "localhost";
+    private static final int CASSANDRA_PORT = 9042;
+    private static final String CASSANDRA_KEYSPACE = "your-keyspace";
+    private static final String CASSANDRA_TABLE = "your-table";
+
+    public static void main(String[] args) {
+        // Configure Kafka consumer
+        Properties kafkaProps = new Properties();
+        kafkaProps.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_BROKERS);
+        kafkaProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        kafkaProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        kafkaProps.put(ConsumerConfig.GROUP_ID_CONFIG, "your-consumer-group");
+
+        // Create Kafka consumer
+        Consumer<String, String> kafkaConsumer = new KafkaConsumer<>(kafkaProps);
+        kafkaConsumer.subscribe(Collections.singleton(TOPIC_NAME));
+
+        // Create Cassandra session
+        CqlSessionBuilder cqlSessionBuilder = CqlSession.builder();
+        cqlSessionBuilder.addContactPoint(CASSANDRA_HOST);
+        cqlSessionBuilder.withPort(CASSANDRA_PORT);
+        cqlSessionBuilder.withKeyspace(CASSANDRA_KEYSPACE);
+        CqlSession cassandraSession = cqlSessionBuilder.build();
+
+        // Start consuming and processing Kafka records
+        while (true) {
+            ConsumerRecords<String, String> records = kafkaConsumer.poll(100);
+            for (ConsumerRecord<String, String> record : records) {
+                String transformedRecord = transformRecord(record.value()); // 
