@@ -1,0 +1,96 @@
+1. Write a Python Program to Display Fibonacci Sequence Using Recursion?
+
+def fibonacci_recursive(n):
+    if n <= 1:
+        return n
+    else:
+        return (fibonacci_recursive(n - 1) + fibonacci_recursive(n - 2))
+
+# Change the value of n to display different terms in the Fibonacci sequence
+n = 10
+
+if n <= 0:
+    print("Please enter a positive integer.")
+else:
+    print("Fibonacci sequence:")
+    for i in range(n):
+        print(fibonacci_recursive(i))
+
+ 2. Write a Python Program to Find Factorial of Number Using Recursion?
+
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n-1)
+
+# Test the function
+num = int(input("Enter a number: "))
+result = factorial(num)
+print("The factorial of", num, "is", result)
+
+
+3. Write a Python Program to calculate your Body Mass Index?
+
+def calculate_bmi(weight, height):
+    """
+    Calculate the Body Mass Index (BMI) given weight in kilograms and height in meters.
+    Formula: BMI = weight / (height * height)
+    """
+    bmi = weight / (height * height)
+    return bmi
+
+def interpret_bmi(bmi):
+    """
+    Interpret the BMI value and provide a corresponding category.
+    """
+    if bmi < 18.5:
+        return "Underweight"
+    elif 18.5 <= bmi < 25:
+        return "Normal weight"
+    elif 25 <= bmi < 30:
+        return "Overweight"
+    else:
+        return "Obese"
+
+# Example usage
+weight = float(input("Enter your weight in kilograms: "))
+height = float(input("Enter your height in meters: "))
+
+bmi = calculate_bmi(weight, height)
+category = interpret_bmi(bmi)
+
+print("Your BMI is:", round(bmi, 2))
+print("Category:", category)
+
+
+4. Write a Python Program to calculate the natural logarithm of any number?"
+
+
+import math
+
+def calculate_natural_logarithm(number):
+    if number <= 0:
+        print("Error: The number must be positive.")
+        return
+    
+    result = math.log(number)
+    return result
+
+# Example usage
+number = float(input("Enter a positive number: "))
+logarithm = calculate_natural_logarithm(number)
+print(f"The natural logarithm of {number} is: {logarithm}")
+
+5. Write a Python Program for cube sum of first n natural numbers?
+
+def cube_sum(n):
+    sum = 0
+    for i in range(1, n+1):
+        sum += i**3
+    return sum
+
+n = int(input("Enter the value of n: "))
+result = cube_sum(n)
+print("The sum of the cubes of the first", n, "natural numbers is:", result)
+
