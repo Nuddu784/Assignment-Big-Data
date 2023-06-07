@@ -1,0 +1,91 @@
+1. Write a Python Program to Find LCM?
+# Prompt the user to enter two numbers
+num1 = int(input("Enter the first number: "))
+num2 = int(input("Enter the second number: "))
+
+# Calculate and print the LCM
+result = lcm(num1, num2)
+print("The LCM of", num1, "and", num2, "is", result)
+
+2. Write a Python Program to Find HCF?
+
+# Taking input from the user
+num1 = int(input("Enter the first number: "))
+num2 = int(input("Enter the second number: "))
+
+# Finding the HCF
+hcf = find_hcf(num1, num2)
+
+# Printing the result
+print("The HCF of", num1, "and", num2, "is", hcf)
+
+
+3. Write a Python Program to Convert Decimal to Binary, Octal and Hexadecimal?
+
+decimal = int(input("Enter a decimal number: "))
+
+binary = bin(decimal)
+octal = oct(decimal)
+hexadecimal = hex(decimal)
+
+print("Binary: " + str(binary))
+print("Octal: " + str(octal))
+print("Hexadecimal: " + str(hexadecimal))
+
+4. Write a Python Program To Find ASCII value of a character?
+
+# Prompt the user to enter a character
+character = input("Enter a character: ")
+
+# Convert the character to ASCII value
+ascii_value = ord(character)
+
+# Display the ASCII value
+print(f"The ASCII value of {character} is {ascii_value}.")
+
+5. Write a Python Program to Make a Simple Calculator with 4 basic mathematical operations?
+
+def add(x, y):
+    return x + y
+
+def subtract(x, y):
+    return x - y
+
+def multiply(x, y):
+    return x * y
+
+def divide(x, y):
+    if y != 0:
+        return x / y
+    else:
+        return "Error: Division by zero"
+
+print("Simple Calculator")
+print("Choose an operation:")
+print("1. Addition")
+print("2. Subtraction")
+print("3. Multiplication")
+print("4. Division")
+
+choice = input("Enter your choice (1/2/3/4): ")
+
+if choice in ['1', '2', '3', '4']:
+    num1 = float(input("Enter the first number: "))
+    num2 = float(input("Enter the second number: "))
+
+    if choice == '1':
+        result = add(num1, num2)
+        operator = "+"
+    elif choice == '2':
+        result = subtract(num1, num2)
+        operator = "-"
+    elif choice == '3':
+        result = multiply(num1, num2)
+        operator = "*"
+    else:
+        result = divide(num1, num2)
+        operator = "/"
+
+    print(f"{num1} {operator} {num2} = {result}")
+else:
+    print("Invalid choice")
