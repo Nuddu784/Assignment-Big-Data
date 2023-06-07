@@ -1,0 +1,104 @@
+1. Write a Python program to find sum of elements in list?
+
+def sum_of_list_elements(lst):
+    """
+    Calculates the sum of elements in a list.
+    
+    Args:
+        lst: A list of integers or floats.
+        
+    Returns:
+        The sum of elements in the list.
+    """
+    total = 0  # Initialize a variable to store the sum
+    
+    for num in lst:
+        total += num  # Add each element to the total
+    
+    return total
+2. Write a Python program to  Multiply all numbers in the list?
+
+# Example usage:
+my_list = [1, 2, 3, 4, 5]
+result = sum_of_list_elements(my_list)
+print("Sum of elements in the list:", result)
+
+
+def multiply_list(numbers):
+    result = 1
+    for num in numbers:
+        result *= num
+    return result
+
+# Example usage
+numbers_list = [2, 3, 4, 5]
+result = multiply_list(numbers_list)
+print("Result:", result
+
+3. Write a Python program to find smallest number in a list?
+
+def find_smallest_number(numbers):
+    if not numbers:
+        return None  # Return None if the list is empty
+
+    smallest = numbers[0]  # Assume the first number is the smallest
+
+    for num in numbers:
+        if num < smallest:
+            smallest = num
+
+    return smallest
+
+# Example usage
+number_list = [5, 2, 9, 1, 7]
+smallest_number = find_smallest_number(number_list)
+print("The smallest number is:", smallest_number)
+
+4. Write a Python program to find largest number in a list?
+
+def find_largest_number(numbers):
+    if len(numbers) == 0:
+        return None
+
+    largest = numbers[0]
+    for num in numbers:
+        if num > largest:
+            largest = num
+
+    return largest
+
+# Example usage
+my_list = [3, 8, 2, 10, 5]
+largest_number = find_largest_number(my_list)
+print("The largest number is:", largest_number)
+
+5. Write a Python program to determine whether the given number is a Harshad Number?
+def is_harshad_number(number):
+    # Calculate the sum of digits
+    sum_of_digits = sum(int(digit) for digit in str(number))
+
+    # Check if the number is divisible by the sum of digits
+    if number % sum_of_digits == 0:
+        return True
+    else:
+        return False
+
+# Test the function
+num = int(input("Enter a number: "))
+if is_harshad_number(num):
+    print(num, "is a Harshad Number.")
+else:
+    print(num, "is not a Harshad Number.")
+
+6. Write a Python program to print all pronic numbers between 1 and 100?
+
+def is_pronic(num):
+    for i in range(int(num**0.5) + 1):
+        if i * (i + 1) == num:
+            return True
+    return False
+
+print("Pronic numbers between 1 and 100:")
+for i in range(1, 101):
+    if is_pronic(i):
+        print(i)
