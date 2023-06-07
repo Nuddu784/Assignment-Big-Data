@@ -1,0 +1,131 @@
+ 1. Write a Python program to find words which are greater than given length k?
+def find_words_greater_than_k(string, k):
+    words = string.split()
+    result = []
+    for word in words:
+        if len(word) > k:
+            result.append(word)
+    return result
+
+# Example usage
+input_string = "This is a sample string to test the program"
+length_threshold = 4
+result_words = find_words_greater_than_k(input_string, length_threshold)
+print(f"Words greater than {length_threshold} characters: {result_words}")
+
+
+2. Write a Python program for removing i-th character from a string?
+def remove_character(string, index):
+    if index < 0 or index >= len(string):
+        return string  # Return the original string if index is out of bounds
+
+    # Create a new string by excluding the character at the given index
+    new_string = string[:index] + string[index+1:]
+    return new_string
+
+# Example usage
+input_string = "Hello, World!"
+index_to_remove = 7
+result = remove_character(input_string, index_to_remove)
+print(f"Original string: {input_string}")
+print(f"Modified string: {result}")
+
+3. Write a Python program to split and join a string?
+
+def split_and_join(string, delimiter):
+    # Split the string into a list of substrings using the specified delimiter
+    substrings = string.split(delimiter)
+    
+    # Join the substrings using a space as the separator
+    joined_string = ' '.join(substrings)
+    
+    return joined_string
+
+# Example usage
+input_string = "Hello,world,how,are,you?"
+input_delimiter = ","
+output_string = split_and_join(input_string, input_delimiter)
+print("Joined string:", output_string)
+
+ 4. Write a Python to check if a given string is binary string or not?
+
+def is_binary_string(string):
+    # Set of valid binary characters
+    valid_chars = {'0', '1'}
+
+    # Check if all characters in the string are valid binary characters
+    for char in string:
+        if char not in valid_chars:
+            return False
+
+    # If all characters are valid binary characters, return True
+    return True
+
+# Test the function
+input_string = input("Enter a string: ")
+if is_binary_string(input_string):
+    print("The string is a binary string.")
+else:
+    print("The string is not a binary string.")
+
+                                 
+ 4. Write a Python to check if a given string is binary string or not?
+
+def is_binary_string(string):
+    # Removing leading and trailing whitespaces
+    string = string.strip()
+
+    # Checking if the string contains only '0' and '1'
+    if all(char in '01' for char in string):
+        return True
+    else:
+        return False
+
+# Example usage
+input_string = input("Enter a string: ")
+if is_binary_string(input_string):
+    print("The string is a binary string.")
+else:
+    print("The string is not a binary string.")
+
+5. Write a Python program to find uncommon words from two Strings?
+
+ def find_uncommon_words(string1, string2):
+    words1 = string1.split()
+    words2 = string2.split()
+
+    # Create sets of words
+    set1 = set(words1)
+    set2 = set(words2)
+
+    # Find uncommon words
+    uncommon_words = set1.symmetric_difference(set2)
+
+    return uncommon_words
+
+# Example usage
+string1 = "Hello world, how are you?"
+string2 = "Hi there, how is it going?"
+uncommon_words = find_uncommon_words(string1, string2)
+
+print("Uncommon words:", uncommon_words)
+
+ 6. Write a Python to find all duplicate characters in string?
+
+  def find_duplicate_characters(string):
+    duplicates = []
+    for char in string:
+        if string.count(char) > 1 and char not in duplicates:
+            duplicates.append(char)
+    return duplicates
+
+# Example usage
+input_string = "Hello, World!"
+result = find_duplicate_characters(input_string)
+print("Duplicate characters:", result)
+
+7. Write a Python Program to check if a string contains any special character?  
+
+                
+
+
