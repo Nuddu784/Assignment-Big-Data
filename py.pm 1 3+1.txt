@@ -1,0 +1,112 @@
+1. Define a class with a generator which can iterate the numbers, which are divisible by 7, 
+between a given range 0 and n
+
+class DivisibleBySevenGenerator:
+    def __init__(self, n):
+        self.n = n
+
+    def divisible_by_seven(self):
+        for num in range(self.n + 1):
+            if num % 7 == 0:
+                yield num
+
+
+2. Write a program to compute the frequency of the words from the input. 
+The output should output after sorting the key alphanumerically.
+
+import re
+from collections import defaultdict
+
+def compute_word_frequency(text):
+    word_frequency = defaultdict(int)
+    words = re.findall(r'\b\w+\b', text.lower())
+    for word in words:
+        word_frequency[word] += 1
+    return word_frequency
+
+def sort_frequency_alphanumerically(word_frequency):
+    sorted_words = sorted(word_frequency.keys())
+    for word in sorted_words:
+        print(f'{word}: {word_frequency[word]}')
+
+# Get user input
+text = input("Enter some text: ")
+
+# Compute word frequency
+word_frequency = compute_word_frequency(text)
+
+# Sort and print frequency
+sort_frequency_alphanumerically(word_frequency)
+
+3. Define a class Person and its two child classes: Male and Female. 
+All classes have a method \"getGender\" which can print \"Male\" for Male class and \"Female\" for Female class."
+
+
+ class Person:
+    def getGender(self):
+        print("Unknown")
+
+class Male(Person):
+    def getGender(self):
+        print("Male")
+
+class Female(Person):
+    def getGender(self):
+        print("Female")
+
+
+4. Please write a program to generate all sentences where subject is in [\"I\", \"You\"] and verb is in ['Play', \"Love\"] and 
+the object is in [\"Hockey\",\"Football\"]
+
+subjects = ["I", "You"]
+verbs = ["Play", "Love"]
+objects = ["Hockey", "Football"]
+
+sentences = []
+
+for subject in subjects:
+    for verb in verbs:
+        for obj in objects:
+            sentence = f"{subject} {verb} {obj}."
+            sentences.append(sentence)
+
+for sentence in sentences:
+    print(sentence)
+
+
+5. Please write a program to compress and decompress the string \"hello world!hello world!hello world!hello world!
+
+import zlib
+
+def compress_string(input_string):
+    compressed_data = zlib.compress(input_string.encode())
+    return compressed_data
+
+def decompress_string(compressed_data):
+    decompressed_string = zlib.decompress(compressed_data).decode()
+    return decompressed_string
+
+# Test the compression and decompression functions
+input_string = "hello world!hello world!hello world!hello world!"
+compressed_data = compress_string(input_string)
+decompressed_string = decompress_string(compressed_data)
+
+print("Input String:", input_string)
+print("Compressed Data:", compressed_data)
+print("Decompressed String:", decompressed_string)
+
+
+6. Please write a binary search function which searches an item in a sorted list. 
+The function should return the index of element to be searched in the list."
+
+my_list = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
+target_element = 23
+
+result = binary_search(my_list, target_element)
+
+if result != -1:
+    print("Element found at index:", result)
+else:
+    print("Element not found in the list.")
+
+
