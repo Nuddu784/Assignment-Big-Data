@@ -1,0 +1,86 @@
+1. Please write a program using generator to print the numbers which can be divisible by 5 and 7 between 0 and
+n in comma separated form while n is input by console."
+
+def divisible_by_5_and_7(n):
+    for num in range(n + 1):
+        if num % 5 == 0 and num % 7 == 0:
+            yield num
+
+n = int(input("Enter a number: "))
+
+numbers = divisible_by_5_and_7(n)
+result = ', '.join(str(num) for num in numbers)
+print(result)
+
+
+ 2. Please write a program using generator to print the even numbers between 0 and n in comma separated form while n 
+   is input by console.
+
+def even_numbers(n):
+    for num in range(n + 1):
+        if num % 2 == 0:
+            yield num
+
+n = int(input("Enter a number: "))
+result = even_numbers(n)
+print(",".join(map(str, result)))
+
+
+ 3. Please write a program using list comprehension to print the Fibonacci Sequence in comma separated form with a given
+ n input by console."
+def fibonacci_sequence(n):
+    sequence = [0, 1]  # Initialize with the first two Fibonacci numbers
+    
+    # Generate the Fibonacci sequence using list comprehension
+    sequence = [sequence.append(sequence[-1] + sequence[-2]) or sequence[-1] for _ in range(2, n)]
+    
+    return sequence
+
+# Get input from the user
+n = int(input("Enter the value of n: "))
+
+# Generate and print the Fibonacci sequence
+fibonacci_seq = fibonacci_sequence(n)
+print(*fibonacci_seq, sep=", ")
+
+4. Assuming that we have some email addresses in the \"username@companyname.com\" format, please write program to print the user name of a given email address. 
+Both user names and company names are composed of letters only."
+
+def extract_username(email):
+    # Split the email address into username and domain parts
+    parts = email.split("@")
+    
+    # Extract and return the username
+    username = parts[0]
+    return username
+
+# Example usage
+email_address = "john@example.com"
+username = extract_username(email_address)
+print("Username:", username)
+
+
+5. Define a class named Shape and its subclass Square. The Square class has an init function which takes a length as argument. Both classes have a area function which 
+  can print the area of the shape where Shape's area is 0 by default.
+class Shape:
+    def __init__(self):
+        self.area = 0
+    
+    def calculate_area(self):
+        print("Area of the shape:", self.area)
+
+
+class Square(Shape):
+    def __init__(self, length):
+        super().__init__()
+        self.length = length
+    
+    def calculate_area(self):
+        self.area = self.length ** 2
+        print("Area of the square:", self.area)
+
+
+
+
+
+
